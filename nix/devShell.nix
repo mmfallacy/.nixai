@@ -1,11 +1,13 @@
 {
-  pkgs,
-}:
-with pkgs;
-mkShell {
-  name = ".nixai development shell";
+  perSystem =
+    { pkgs, ... }:
+    {
+      devShells.default = pkgs.mkShell {
+        name = ".nixai development shell";
 
-  nativeBuildInputs = [
-  ];
+        nativeBuildInputs = [
+        ];
 
+      };
+    };
 }

@@ -1,26 +1,46 @@
 {
   description = ".nixai";
-
   outputs =
-    { nixpkgs-stable, systems, ... }@inputs:
-    builtins.foldl' (nixpkgs-stable.lib.recursiveUpdate) { } (
-      builtins.map (
-        system:
-        let
-          pkgs = nixpkgs-stable.legacyPackages.${system};
-          # extras = {
-          #   pkgs-unstable = inputs.nixpkgs-unstable.legacyPackages.${system};
-          # };
-        in
+    inputs@{ self, flake-parts, ... }:
+    let
+      inherit (inputs.nixpkgs) lib;
+      shouldImport = file: file.hasExt "nix" && !(lib.hasPrefix "_" file.name);
+      import-tree =
+        path:
+        lib.pipe path [
+          (lib.fileset.fileFilter shouldImport)
+          (lib.fileset.toList)
+        ];
+    in
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      debug = true;
+      systems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
+
+      imports = lib.flatten [
+        (import-tree ./nix)
+      ];
+
+      perSystem =
+        { system, ... }:
         {
-          devShells.${system}.default = import ./nix/devShell.nix { inherit pkgs; };
-        }
-      ) (import systems)
-    );
+          _module.args.pkgs = import inputs.nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
+          _module.args.extras = {
+
+          };
+        };
+    };
 
   inputs = {
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
-    # nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    systems.url = "github:nix-systems/default";
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+    nixpkgs.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz";
   };
 }
