@@ -53,30 +53,14 @@ stdenv.mkDerivation (finalAttrs: rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/lib/ordna"
-    cp -r ./node_modules "$out/lib/ordna"
-    cp ./package.json "$out/lib/ordna"
-    cp ./pnpm-workspace.yaml "$out/lib/ordna"
+    echo "inject-workspace-packages=true" >> .npmrc
 
-    mkdir -p "$out/lib/ordna/packages/core"
-    cp -r ./packages/core/dist "$out/lib/ordna/packages/core"
-    cp -r ./packages/core/node_modules "$out/lib/ordna/packages/core"
-    cp ./packages/core/package.json "$out/lib/ordna/packages/core"
-
-    mkdir -p "$out/lib/ordna/packages/cli"
-    cp -r ./packages/cli/dist "$out/lib/ordna/packages/cli"
-    cp -r ./packages/cli/node_modules "$out/lib/ordna/packages/cli"
-    cp ./packages/cli/package.json "$out/lib/ordna/packages/cli"
-
-    mkdir -p "$out/lib/ordna/packages/web"
-    cp -r ./packages/web/dist "$out/lib/ordna/packages/web"
-    cp -r ./packages/web/dist-client "$out/lib/ordna/packages/web"
-    cp -r ./packages/web/node_modules "$out/lib/ordna/packages/web"
-    cp ./packages/web/package.json "$out/lib/ordna/packages/web"
-
+    mkdir -p "$out/lib"
+    pnpm --offline --filter @frehilm/ordna-cli --prod deploy "$out/lib"
     mkdir -p "$out/bin"
     makeWrapper ${nodejs}/bin/node $out/bin/ordna \
-      --add-flags "$out/lib/ordna/packages/cli/dist/bin/ordna.js"
+      --add-flags "$out/lib/dist/bin/ordna.js"
+
 
     runHook postInstall
   '';
