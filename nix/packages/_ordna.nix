@@ -13,7 +13,7 @@ let
   pnpm = pnpm_10;
   nodejs = nodejs_26;
 in
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ordna";
   version = "unstable";
 
