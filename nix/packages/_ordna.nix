@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "ordna";
-  version = "0.2.1";
+  version = "unstable";
 
   src = fetchFromGitHub {
     owner = "FreHilm";
     repo = "ordna";
-    tag = version;
-    hash = "sha256-JMjO8YegDsVUqlWn8XyaDqgSoMXTlqs2sFKBI2dSgs8=";
+    rev = "main";
+    hash = "sha256-W6PFsrws5/2JFj1tOL5GLRS1h++jc2HBZ84w4NToAq8=";
   };
 
   __structuredAttrs = true;
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-5rErUp8FGNC/XLPh4VBjrXyFtso5EXEcbkgfIDAH9lE=";
+    hash = "sha256-NHXgnpcGSjtg+mkdtXf9JxTXzT5lQG51dKxFVQNdCIM=";
   };
 
   nativeBuildInputs = [
