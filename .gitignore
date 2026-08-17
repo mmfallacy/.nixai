@@ -2,3 +2,5 @@
 
 # Nix build result symlink
 result
+
+.env
