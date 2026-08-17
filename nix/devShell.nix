@@ -8,7 +8,7 @@
         nativeBuildInputs = [
           extras.mypkgs.ordna
           (extras.mypkgs.pi-default.override {
-            agentHome = "~/dev/.nixai/pi/default";
+            agentConfig = "~/dev/.nixai/pi/default";
           })
         ];
 

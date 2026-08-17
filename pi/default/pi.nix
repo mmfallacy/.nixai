@@ -7,7 +7,8 @@ rec {
       fd,
       ripgrep,
       pi-coding-agent,
-      agentHome ? "${placeholder "out"}/share",
+      agentConfig ? "${placeholder "out"}/share",
+      sessionDir ? "",
       runtimeDeps ? [ ],
       wrapperArgs ? [ ],
     }:
@@ -25,20 +26,26 @@ rec {
 
       src = ./.;
 
-      installPhase = ''
-        runHook preInstall
+      installPhase =
+        let
+          finalSessionDir = if sessionDir == "" then "$HOME/.pi/${finalAttrs.name}/sessions" else sessionDir;
+        in
+        # bash
+        ''
+          runHook preInstall
 
-        mkdir -p $out/bin
-        mkdir -p $out/share
+          mkdir -p $out/bin
+          mkdir -p $out/share
 
-        cp -r $src $out/share
+          cp -r $src $out/share
 
-        makeWrapper ${lib.getExe pi} $out/bin/pi \
-          --set PI_CODING_AGENT_DIR "${agentHome}" \
-          ${lib.escapeShellArgs wrapperArgs}
+          makeWrapper ${lib.getExe pi} $out/bin/pi \
+            --set PI_CODING_AGENT_DIR "${agentConfig}" \
+            --run 'export PI_CODING_AGENT_SESSION_DIR="${finalSessionDir}"' \
+            ${lib.escapeShellArgs wrapperArgs}
 
-        runHook postInstall
-      '';
+          runHook postInstall
+        '';
     });
   perSystem =
     { pkgs, ... }:
