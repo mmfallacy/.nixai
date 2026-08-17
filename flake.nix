@@ -31,7 +31,7 @@
             config.allowUnfree = true;
           };
           _module.args.extras = {
-
+            mypkgs = self.packages.${system};
           };
         };
     };
