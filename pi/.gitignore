@@ -1,0 +1,7 @@
+# should already be placed in a untracked location
+sessions/ 
+
+# should not track
+trust.json
+auth.json
+models-store.json
