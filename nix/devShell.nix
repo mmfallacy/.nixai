@@ -6,9 +6,10 @@
         name = ".nixai development shell";
 
         nativeBuildInputs = [
-          pkgs.pi-coding-agent
           extras.mypkgs.ordna
-          extras.mypkgs.pi-default
+          (extras.mypkgs.pi-default.override {
+            agentHome = "~/dev/.nixai/pi/default";
+          })
         ];
 
       };
