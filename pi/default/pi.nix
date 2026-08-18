@@ -11,20 +11,21 @@ rec {
       sessionDir ? "",
       runtimeDeps ? [ ],
       wrapperArgs ? [ ],
+      src ? throw "src must be provided",
+      name ? throw "name must be provided",
     }:
     let
       pi = pi-coding-agent;
     in
     stdenvNoCC.mkDerivation (finalAttrs: {
-      name = "pi-default";
+      inherit src name;
+
       buildInputs = [ makeWrapper ];
       propagatedBuildInputs = [
         fd
         ripgrep
       ]
       ++ runtimeDeps;
-
-      src = ./.;
 
       installPhase =
         let
@@ -50,6 +51,9 @@ rec {
   perSystem =
     { pkgs, ... }:
     {
-      packages.pi-default = pkgs.callPackage flake.piInstances.default { };
+      packages.pi-default = pkgs.callPackage flake.piInstances.default {
+        src = ./.;
+        name = "pi-default";
+      };
     };
 }
