@@ -7,7 +7,7 @@ rec {
       fd,
       ripgrep,
       pi-coding-agent,
-      agentConfig ? "${placeholder "out"}/share",
+      agentConfigRoot ? "${placeholder "out"}/share",
       sessionDir ? "",
       runtimeDeps ? [ ],
       wrapperArgs ? [ ],
@@ -16,9 +16,12 @@ rec {
     }:
     let
       pi = pi-coding-agent;
+      agentConfig = "${agentConfigRoot}/${name}";
     in
     stdenvNoCC.mkDerivation (finalAttrs: {
-      inherit src name;
+      inherit src;
+
+      name = "pi-${name}";
 
       buildInputs = [ makeWrapper ];
       propagatedBuildInputs = [
@@ -36,9 +39,9 @@ rec {
           runHook preInstall
 
           mkdir -p $out/bin
-          mkdir -p $out/share
+          mkdir -p $out/share/${name}
 
-          cp -r $src $out/share
+          cp -r $src/. $out/share/${name}
 
           makeWrapper ${lib.getExe pi} $out/bin/pi \
             --set PI_CODING_AGENT_DIR "${agentConfig}" \
@@ -53,7 +56,7 @@ rec {
     {
       packages.pi-default = pkgs.callPackage flake.piInstances.default {
         src = ./.;
-        name = "pi-default";
+        name = "default";
       };
     };
 }
