@@ -9,7 +9,6 @@
     "openai-codex/gpt-5.6-terra"
   ],
   "packages": [
-    "npm:@narumitw/pi-subagents",
     "npm:@narumitw/pi-plan-mode",
     "npm:@narumitw/pi-lsp",
     "npm:@narumitw/pi-btw",
@@ -18,3 +17,4 @@
     "npm:pi-fzfp"
   ]
 }
+
