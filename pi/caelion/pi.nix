@@ -5,6 +5,11 @@ top: {
       packages.pi-caelion = pkgs.callPackage top.config.flake.piInstances.default {
         src = ./.;
         name = "caelion";
+
+        runtimeDeps = with pkgs; [
+          fd
+          fzf
+        ];
       };
     };
 }
