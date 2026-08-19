@@ -51,12 +51,4 @@ rec {
           runHook postInstall
         '';
     });
-  perSystem =
-    { pkgs, ... }:
-    {
-      packages.pi-default = pkgs.callPackage flake.piInstances.default {
-        src = ./.;
-        name = "default";
-      };
-    };
 }
