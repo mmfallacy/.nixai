@@ -13,10 +13,12 @@ rec {
       wrapperArgs ? [ ],
       src ? throw "src must be provided",
       name ? throw "name must be provided",
+      binPrefix ? "",
     }:
     let
       pi = pi-coding-agent;
       agentConfig = "${agentConfigRoot}/${name}";
+      binName = lib.optionalString (binPrefix != "") "${binPrefix}-" + name;
     in
     stdenvNoCC.mkDerivation (finalAttrs: {
       inherit src;
@@ -43,7 +45,7 @@ rec {
 
           cp -r $src/. $out/share/${name}
 
-          makeWrapper ${lib.getExe pi} $out/bin/pi \
+          makeWrapper ${lib.getExe pi} $out/bin/${binName} \
             --set PI_CODING_AGENT_DIR "${agentConfig}" \
             --run 'export PI_CODING_AGENT_SESSION_DIR="${finalSessionDir}"' \
             ${lib.escapeShellArgs wrapperArgs}
