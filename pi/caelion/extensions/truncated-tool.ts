@@ -1,0 +1,1 @@
+../../default/extensions/truncated-tool.ts
