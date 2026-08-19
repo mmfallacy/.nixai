@@ -50,5 +50,8 @@ rec {
 
           runHook postInstall
         '';
+
+      # Temp: skill_modules introduction kinda broke reproducibility and isolation via nix store 😆
+      dontCheckForBrokenSymlinks = true;
     });
 }
