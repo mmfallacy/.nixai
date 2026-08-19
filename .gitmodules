@@ -1,0 +1,3 @@
+[submodule "pi/default/skill_modules/mattpocock"]
+	path = pi/default/skill_modules/mattpocock
+	url = https://github.com/mattpocock/skills.git
