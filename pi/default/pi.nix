@@ -6,6 +6,7 @@ rec {
       makeWrapper,
       fd,
       ripgrep,
+      nodejs,
       pi-coding-agent,
       agentConfigRoot ? "${placeholder "out"}/share",
       sessionDir ? "",
@@ -29,6 +30,8 @@ rec {
       propagatedBuildInputs = [
         fd
         ripgrep
+
+        nodejs
       ]
       ++ runtimeDeps;
 
