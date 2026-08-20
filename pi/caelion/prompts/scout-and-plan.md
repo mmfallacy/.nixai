@@ -1,0 +1,1 @@
+../../default/prompts/scout-and-plan.md
