@@ -14,5 +14,10 @@ in
       default = { };
       description = "Pi Agent instances";
     };
+    builders = mkOption {
+      type = attrsOf (functionTo package);
+      default = { };
+      description = "Agent recipes to create wrapper instances";
+    };
   };
 }
