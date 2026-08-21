@@ -8,6 +8,7 @@
 
       # Absolute Runtime Dependencies
       opencode,
+      generate-opencode-config,
 
       # Package Parameters
       name ? throw "name must be provided",
@@ -45,6 +46,15 @@
                 export OPENCODE_CONFIG_DIR="${configPath}"
               fi
             '';
+          generateOpencodeConfig = # bash
+            ''
+              conf=$OPENCODE_CONFIG_DIR/config/root.ts
+              out=$OPENCODE_CONFIG_DIR/opencode.json
+              if [[ -f "$conf" ]]; then 
+                echo "Generating opencode.json from config/root.ts"
+                ${lib.getExe generate-opencode-config} "$conf" "$out"
+              fi
+            '';
         in
         ''
           runHook preBuild
@@ -52,6 +62,7 @@
 
           makeWrapper ${lib.getExe opencode} "$out/bin/${binName}" \
             --run '${checkAndSetConfigRootVar}' \
+            --run '${generateOpencodeConfig}' \
             --run 'export XDG_DATA_HOME="${sessionDir}"' \
             --set OPENCODE_DISABLE_LSP_DOWNLOAD true \
             --set OPENCODE_EXPERIMENTAL_LSP_TOOL true \
