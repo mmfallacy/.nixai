@@ -1,4 +1,4 @@
-{ }:
+{ ... }:
 {
   flake.builders.opencode =
     {
@@ -10,11 +10,12 @@
       opencode,
 
       # Package Parameters
-      configRoot ? throw "config root must be provided",
+      name ? throw "name must be provided",
+
       sessionDirRoot ? "\${XDG_DATA_HOME:-$HOME/.local/share}",
+      configRoot ? "\$NIXAI_AGENTFORMS_ROOT",
       runtimeDeps ? [ ],
       wrapperArgs ? [ ],
-      name ? throw "name must be provided",
       binPrefix ? "",
     }:
     let
@@ -33,18 +34,29 @@
       nativeBuildInputs = [ makeWrapper ];
       propagatedBuildInputs = [ ] ++ runtimeDeps;
 
-      buildPhase = ''
-        runHook preBuild
-        mkdir -p $out/bin
+      buildPhase =
+        let
+          checkAndSetConfigRootVar = # bash
+            ''
+              if [[ -z "${configRoot}" ]]; then
+                echo "warning: ${configRoot} is unset! using untracked settings in \$XDG_CONFIG_HOME instead" >&2
+              else
+                export XDG_CONFIG_HOME="${configPath}"
+              fi
+            '';
+        in
+        ''
+          runHook preBuild
+          mkdir -p $out/bin
 
-        makeWrapper ${lib.getExe opencode} "$out/bin/${binName}" \
-          --set XDG_CONFIG_HOME "${configPath}" \
-          --set OPENCODE_DISABLE_LSP_DOWNLOAD true \
-          --set OPENCODE_EXPERIMENTAL_LSP_TOOL true \
-          --run 'export XDG_DATA_HOME="${sessionDir}"' \
-          ${lib.escapeShellArgs wrapperArgs}
+          makeWrapper ${lib.getExe opencode} "$out/bin/${binName}" \
+            --run '${checkAndSetConfigRootVar}' \
+            --run 'export XDG_DATA_HOME="${sessionDir}"' \
+            --set OPENCODE_DISABLE_LSP_DOWNLOAD true \
+            --set OPENCODE_EXPERIMENTAL_LSP_TOOL true \
+            ${lib.escapeShellArgs wrapperArgs}
 
-        runHook postBuild
-      '';
+          runHook postBuild
+        '';
     };
 }
