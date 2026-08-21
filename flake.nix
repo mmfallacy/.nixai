@@ -31,6 +31,7 @@
           _module.args.pkgs = import inputs.nixpkgs {
             inherit system;
             config.allowUnfree = true;
+            overlays = [ self.overlays.internal-scripts ];
           };
           _module.args.extras = {
             mypkgs = self.packages.${system};

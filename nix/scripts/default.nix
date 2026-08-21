@@ -1,4 +1,9 @@
 {
+  # add overlays only on demand
+  flake.overlays.internal-scripts = final: _prev: {
+    generate-opencode-config = final.callPackage ./generate-opencode-config/_package.nix { };
+  };
+
   perSystem =
     { pkgs, ... }:
     {
