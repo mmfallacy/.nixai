@@ -40,8 +40,9 @@
             ''
               if [[ -z "${configRoot}" ]]; then
                 echo "warning: ${configRoot} is unset! using untracked settings in \$XDG_CONFIG_HOME instead" >&2
+                export OPENCODE_CONFIG_DIR="$XDG_CONFIG_HOME/${name}"
               else
-                export XDG_CONFIG_HOME="${configPath}"
+                export OPENCODE_CONFIG_DIR="${configPath}"
               fi
             '';
         in
