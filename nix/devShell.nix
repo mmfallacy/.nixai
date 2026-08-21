@@ -9,6 +9,10 @@
             ln -s ${pkgs.lib.getExe pkgs.pi-coding-agent} $out/bin/pi-unwrapped
           '';
 
+          js_tools = with pkgs; [
+            bun
+            vtsls
+          ];
         in
         pkgs.mkShell {
           name = ".nixai development shell";
@@ -20,6 +24,7 @@
               agentConfigRoot = "~/dev/.nixai/pi";
             })
           ];
+          ++ js_tools;
 
         };
     };
