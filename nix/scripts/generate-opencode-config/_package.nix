@@ -4,7 +4,7 @@
   bun,
   coreutils,
 }:
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   name = "generate-opencode-config";
 
   src = ./.;
@@ -22,4 +22,6 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
-}
+
+  meta.mainProgram = finalAttrs.name;
+})
