@@ -22,6 +22,7 @@
       imports = lib.flatten [
         (import-tree ./nix)
         (import-tree ./pi)
+        (import-tree ./agentforms)
       ];
 
       perSystem =
