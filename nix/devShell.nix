@@ -23,7 +23,7 @@
             (extras.mypkgs.pi-caelion.override {
               agentConfigRoot = "~/dev/.nixai/pi";
             })
-          ];
+          ]
           ++ js_tools;
 
         };
