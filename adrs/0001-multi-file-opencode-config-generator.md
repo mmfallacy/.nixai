@@ -29,18 +29,18 @@ be:
 generate-opencode-config <agentforms/index.ts> <output-directory>
 ```
 
-The entrypoint must default-export a record mapping filenames to JSON objects:
+The entrypoint must default-export a named record of file entries:
 
 ```ts
 export default {
-  "opencode.json": opencode,
-  "tui.json": tui,
-  "model-aliases.json": modelAliases,
+  opencode: { file: "opencode.json", value: opencode },
+  tui: { file: "tui.json", value: tui },
+  modelAliases: { file: "model-aliases.json", value: modelAliases },
 };
 ```
 
-The generator will create one file for each record entry. The record key is
-the output filename and the record value is the file contents.
+The generator will create one file for each record entry. The record key names
+the entry, `file` is the output filename, and `value` is the file contents.
 
 Each generated JSON object will contain a `hash` property. The hash will be
 computed using canonical JSON and SHA-256 after removing any existing `hash`
@@ -80,7 +80,7 @@ Generated files must tolerate the reserved `hash` property.
 
 - Change the generator CLI from an output file argument to an output directory
   argument.
-- Load the entrypoint's default export and validate the filename-to-object
+- Load the entrypoint's default export and validate the named file-entry
   record.
 - Extract hash calculation and existing-file comparison into per-file logic.
 - Add preflight validation before moving or writing files.

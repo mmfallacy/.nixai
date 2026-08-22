@@ -1,4 +1,4 @@
-import type { JsonObject, PlannedFile } from "./types";
+import type { GeneratedFile, JsonObject, PlannedFile } from "./types";
 import { hashConfig, isRecord } from "./json";
 import { outputPathFor } from "./paths";
 
@@ -19,13 +19,17 @@ async function readExisting(outputPath: string) {
 }
 
 async function planFile(
-  filename: string,
-  value: unknown,
+  name: string,
+  entry: unknown,
   outputDirectory: string,
   outputPaths: Set<string>,
 ): Promise<PlannedFile> {
+  if (!isRecord(entry) || typeof entry.file !== "string" || !("value" in entry))
+    throw new Error(`Generated entry ${name} must contain a file and value`);
+
+  const { file: filename, value } = entry as GeneratedFile;
   if (!isRecord(value))
-    throw new Error(`Generated value for ${filename} must be a JSON object`);
+    throw new Error(`Generated value for ${name} must be a JSON object`);
 
   const outputPath = outputPathFor(filename, outputDirectory);
   if (outputPaths.has(outputPath))
@@ -61,8 +65,8 @@ export async function planFiles(
   const files: PlannedFile[] = [];
   const outputPaths = new Set<string>();
 
-  for (const [filename, value] of Object.entries(generatedFiles)) {
-    files.push(await planFile(filename, value, outputDirectory, outputPaths));
+  for (const [name, entry] of Object.entries(generatedFiles)) {
+    files.push(await planFile(name, entry, outputDirectory, outputPaths));
   }
 
   for (const file of files) {

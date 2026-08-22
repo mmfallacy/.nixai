@@ -1,7 +1,8 @@
-import root from "./config/root.ts";
-
-export { root as defaultRoot };
+import root from "./config/opencode";
 
 export default {
-  "opencode.json": root,
+  opencode: {
+    file: "opencode.json",
+    value: root,
+  },
 };

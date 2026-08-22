@@ -16,7 +16,7 @@ export async function generateOpencodeConfig(
 
   if (!isRecord(generatedFiles)) {
     throw new Error(
-      `Config module ${configPath} must export a default filename-to-object record`,
+      `Config module ${configPath} must export a default named file record`,
     );
   }
 

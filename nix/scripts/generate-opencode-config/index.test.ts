@@ -21,8 +21,8 @@ async function fixture(source: string) {
 
 test("generates multiple files with embedded hashes", async () => {
   const paths = await fixture(`export default {
-    "opencode.json": { "$schema": "https://opencode.ai/config.json" },
-    "tui.json": { "theme": "dark" },
+    opencode: { file: "opencode.json", value: { "$schema": "https://opencode.ai/config.json" } },
+    tui: { file: "tui.json", value: { "theme": "dark" } },
   }`)
 
   await generateOpencodeConfig(paths.configPath, paths.outputDirectory)
@@ -35,7 +35,7 @@ test("generates multiple files with embedded hashes", async () => {
 })
 
 test("does not back up files whose hashes still match", async () => {
-  const paths = await fixture(`export default { "opencode.json": { "model": "a/model" } }`)
+  const paths = await fixture(`export default { opencode: { file: "opencode.json", value: { "model": "a/model" } } }`)
   await generateOpencodeConfig(paths.configPath, paths.outputDirectory)
   await generateOpencodeConfig(paths.configPath, paths.outputDirectory)
 
@@ -43,7 +43,7 @@ test("does not back up files whose hashes still match", async () => {
 })
 
 test("backs up manually modified files", async () => {
-  const paths = await fixture(`export default { "opencode.json": { "model": "a/model" } }`)
+  const paths = await fixture(`export default { opencode: { file: "opencode.json", value: { "model": "a/model" } } }`)
   await generateOpencodeConfig(paths.configPath, paths.outputDirectory)
   await Bun.write(join(paths.outputDirectory, "opencode.json"), '{ "model": "manual" }\n')
   await generateOpencodeConfig(paths.configPath, paths.outputDirectory)
@@ -53,8 +53,8 @@ test("backs up manually modified files", async () => {
 
 test("fails before changing any file when a backup conflicts", async () => {
   const paths = await fixture(`export default {
-    "one.json": { "value": 1 },
-    "two.json": { "value": 2 },
+    one: { file: "one.json", value: { "value": 1 } },
+    two: { file: "two.json", value: { "value": 2 } },
   }`)
   await generateOpencodeConfig(paths.configPath, paths.outputDirectory)
   await Bun.write(join(paths.outputDirectory, "one.json"), '{ "value": "manual" }\n')
@@ -66,9 +66,9 @@ test("fails before changing any file when a backup conflicts", async () => {
 })
 
 test("rejects invalid exports and unsafe filenames", async () => {
-  const invalid = await fixture(`export default { "opencode.json": [] }`)
+  const invalid = await fixture(`export default { opencode: { file: "opencode.json", value: [] } }`)
   await expect(generateOpencodeConfig(invalid.configPath, invalid.outputDirectory)).rejects.toThrow("JSON object")
 
-  const unsafe = await fixture(`export default { "../config.json": { "value": 1 } }`)
+  const unsafe = await fixture(`export default { config: { file: "../config.json", value: { "value": 1 } } }`)
   await expect(generateOpencodeConfig(unsafe.configPath, unsafe.outputDirectory)).rejects.toThrow("Unsafe")
 })
