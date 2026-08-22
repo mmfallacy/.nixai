@@ -3,4 +3,5 @@
 	url = https://github.com/mattpocock/skills.git
 [submodule "plugins/opencode-model-alias"]
 	path = plugins/opencode-model-alias
-	url = https://github.com/mattaschmann/opencode-model-alias
+	url = https://github.com/mmfallacy/opencode-model-alias.git
+	branch = fix/respect-opencode-config-dir
