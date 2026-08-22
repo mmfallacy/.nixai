@@ -4,14 +4,15 @@ export const tools = {
   permission: {
     "*": "deny",
 
-    // read: "allow",
-    // grep: "allow",
-    // lsp: "allow",
-    //
-    // write: "allow",
-    // edit: "allow",
-    // bash: "allow",
-    //
-    // question: "allow",
+    read: "allow",
+    grep: "allow",
+    lsp: "allow",
+
+    write: "allow",
+    edit: "allow",
+    bash: "allow",
+
+    question: "allow",
+    task: "allow",
   },
 } satisfies Pick<Config, "permission">;
