@@ -8,6 +8,7 @@
 
       # Absolute Runtime Dependencies
       opencode,
+      bun,
       generate-opencode-config,
 
       # Package Parameters
@@ -32,7 +33,10 @@
       # No src
       dontUnpack = true;
 
-      nativeBuildInputs = [ makeWrapper ];
+      nativeBuildInputs = [
+        makeWrapper
+        bun
+      ];
       propagatedBuildInputs = [ ] ++ runtimeDeps;
 
       buildPhase =
@@ -52,6 +56,7 @@
               out=$OPENCODE_CONFIG_DIR/opencode.json
               if [[ -f "$conf" ]]; then 
                 echo "Generating opencode.json from config/root.ts"
+                bun install --cwd "$OPENCODE_CONFIG_DIR"
                 ${lib.getExe generate-opencode-config} "$conf" "$out"
               fi
             '';
