@@ -2,7 +2,7 @@ import type { Config } from "@opencode-ai/sdk/v2";
 import path from "node:path";
 
 const NIXAI_PLUGINS_DIR = path.resolve(
-  Bun.env.NIXAI_AGENTFORMS_ROOT ?? `${import.meta.dir}/../..`,
+  Bun.env.NIXAI_AGENTFORMS_ROOT ?? `${import.meta.dir}/../../..`,
   "..",
   "plugins",
 );
