@@ -1,0 +1,8 @@
+{
+  "name": "@agentforms/default",
+  "type": "module",
+  "exports": "./index.ts",
+  "dependencies": {
+    "@opencode-ai/sdk": "1.18.16"
+  }
+}
