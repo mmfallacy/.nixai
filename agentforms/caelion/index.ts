@@ -1,4 +1,4 @@
-import root from "./config/root.ts";
+import root from "./config/opencode";
 
 export default {
   opencode: {
