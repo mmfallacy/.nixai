@@ -1,3 +1,6 @@
 [submodule "pi/default/skill_modules/mattpocock"]
 	path = pi/default/skill_modules/mattpocock
 	url = https://github.com/mattpocock/skills.git
+[submodule "plugins/opencode-model-alias"]
+	path = plugins/opencode-model-alias
+	url = https://github.com/mattaschmann/opencode-model-alias
