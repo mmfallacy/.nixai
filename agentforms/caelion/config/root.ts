@@ -1,14 +1,21 @@
-import type { Config } from "@opencode-ai/sdk/v2"
+import type { Config } from "@opencode-ai/sdk/v2";
 
-import { agents } from "./agents.ts"
-import { mcp } from "./mcp.ts"
-import { models } from "./models.ts"
+import { agents } from "./agents.ts";
+import { mcp } from "./mcp.ts";
+import { models } from "./models.ts";
+import { defaultRoot } from "@agentforms/default";
+import { deepmerge } from "deepmerge-ts";
 
-const config = {
-  $schema: "https://opencode.ai/config.json",
-  ...mcp,
-  ...models,
-  ...agents,
-} satisfies Config
+const config = deepmerge(
+  ...[
+    {
+      $schema: "https://opencode.ai/config.json",
+    },
+    defaultRoot,
+    mcp,
+    models,
+    agents,
+  ],
+) satisfies Config;
 
-export default config
+export default config;

@@ -1,7 +1,9 @@
 {
   "type": "module",
   "dependencies": {
+    "@agentforms/default": "file:../default",
     "@opencode-ai/plugin": "1.18.16",
-    "@opencode-ai/sdk": "1.18.16"
+    "@opencode-ai/sdk": "1.18.16",
+    "deepmerge-ts": "^8.0.2"
   }
 }
