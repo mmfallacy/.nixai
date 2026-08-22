@@ -52,12 +52,11 @@
             '';
           generateOpencodeConfig = # bash
             ''
-              conf=$OPENCODE_CONFIG_DIR/config/root.ts
-              out=$OPENCODE_CONFIG_DIR/opencode.json
-              if [[ -f "$conf" ]]; then 
-                echo "Generating opencode.json from config/root.ts"
+              conf=$OPENCODE_CONFIG_DIR/index.ts
+              if [[ -f "$conf" ]]; then
+                echo "Generating OpenCode configuration files from index.ts"
                 bun install --cwd "$OPENCODE_CONFIG_DIR"
-                ${lib.getExe generate-opencode-config} "$conf" "$out"
+                ${lib.getExe generate-opencode-config} "$conf" "$OPENCODE_CONFIG_DIR"
               fi
             '';
         in
